@@ -9,6 +9,7 @@ using WebApplication2.Models;
 
 namespace WebApplication2.Controllers
 {
+    [Produces("application/json")]
     [Route("api/[controller]")]
     [ApiController]
     public class CommentsController : ControllerBase
@@ -22,10 +23,21 @@ namespace WebApplication2.Controllers
 
         // GET: api/Comments
         /// <summary>
-        /// Gets a list of comments.
+        /// Gets a list of all the comments
         /// </summary>
-        /// <returns></returns>
+        /// /// <remark>
+        /// Sample request:
+        /// 
+        ///   GET  /api/Comments
+        /// 
+        /// </remark>
+        ///    /// <returns> A list of Comment objects.</returns>
+        /// <response code="201">Returns the list of comments.</response>
+        /// <response code="400">If the list of comments is null</response>  
+    
         [HttpGet]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<IEnumerable<Comment>>> GetComments()
         {
             return await _context.Comments.ToListAsync();
@@ -34,11 +46,22 @@ namespace WebApplication2.Controllers
 
         // GET: api/Comments/5
         /// <summary>
-        /// Gets a list of comments.
+        /// Get a Comment with an unique id
         /// </summary>
-        /// <param name="id">Gets a comment depending on the id.</param>
-        /// <returns></returns>
+        /// <remark>
+        /// Sample request:
+        /// 
+        ///   GET  /api/Comments/8
+        /// 
+        /// </remark>
+        /// /// <param name="id">The ID for the comment which is associated to a Movie </param>
+        /// <returns>The comment corresponding to a specific id.</returns>
+        /// <response code="201">Returns the comment with a specific id.</response>
+        /// <response code="400">If the comment is null</response>
+     
         [HttpGet("{id}")]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<Comment>> GetComment(long id)
         {
             var comment = await _context.Comments.FindAsync(id);
@@ -52,15 +75,30 @@ namespace WebApplication2.Controllers
         }
 
         // PUT: api/Comments/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for
-        // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         /// <summary>
-        /// Updates a comment.
+        /// Add or Update
         /// </summary>
-        /// <param name="id">Updates a comment depending on an id.</param>
-        /// <param name="comment"> Shows a comment.</param>
-        /// <returns></returns>
+        /// /// <remark>
+        /// Sample request:
+        /// 
+        ///   PUT  /api/Comments/5
+        ///   
+        /// PUT/ TODO
+        /// {
+        /// "id": 5,
+        ///"text": "string ",
+        ///"important": true,
+        /// "movieId": 0
+        /// }
+        /// </remark>
+        /// <param name="comment">The updated or created Comment</param>
+        /// <returns>The updated comment.</returns>
+        /// <response code="201">The comment has been updated.</response>
+        /// <response code="400">If the comment is null</response>   
+  
         [HttpPut("{id}")]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> PutComment(long id, Comment comment)
         {
             if (id != comment.Id)
@@ -90,14 +128,28 @@ namespace WebApplication2.Controllers
         }
 
         // POST: api/Comments
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for
-        // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         /// <summary>
-        /// Adds a new comment.
+        /// Add/Create a new Comment
         /// </summary>
-        /// <param name="comment"> Adds a comment.</param>
-        /// <returns></returns>
+        /// /// <remarks>
+        /// Sample request:
+        ///
+        ///     POST /Todo
+        ///     {
+        ///        "id": 1,
+        ///        "name": "Item1",
+        ///        "isComplete": true
+        ///     }
+        ///
+        /// </remarks>
+        /// <param name="comment">Comment we want to add </param>
+        /// <returns>A newly created Comment item.</returns>
+        /// <response code="201">Returns the newly created comment.</response>
+        /// <response code="400">If the comment is null</response>            
+
         [HttpPost]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<Comment>> PostComment(Comment comment)
         {
             _context.Comments.Add(comment);
@@ -108,11 +160,19 @@ namespace WebApplication2.Controllers
 
         // DELETE: api/Comments/5
         /// <summary>
-        /// Removes a comment. 
+        /// Delete a comment with a certain id
         /// </summary>
-        /// <param name="id"> Removes a comment depending on an id.</param>
+        ///         /// /// <remarks>
+        /// DELETE /api/Comments/5
+        ///
+        /// </remarks>
+        /// <param name="id"></param>
+        /// <response code="201">The comment has been deleted succesfully.</response>
+        /// <response code="400">If the comment is null</response>  
         /// <returns></returns>
         [HttpDelete("{id}")]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<Comment>> DeleteComment(long id)
         {
             var comment = await _context.Comments.FindAsync(id);

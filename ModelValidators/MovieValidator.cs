@@ -15,6 +15,8 @@ namespace WebApplication2.ModelValidators
 
 			RuleFor(x => x.DateAdded).LessThan(DateTime.Now);
 
+			RuleFor(x => x.Title).Length(1, 10);
+
 		}
 		}
 	}

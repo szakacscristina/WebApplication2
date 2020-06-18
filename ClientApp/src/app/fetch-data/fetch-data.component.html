@@ -2,26 +2,8 @@
 
 <p>This component demonstrates fetching data from the server.</p>
 
-<p *ngIf="!forecasts"><em>Loading...</em></p>
+<p *ngIf="!movies"><em>Loading...</em></p>
 
-<table class='table table-striped' aria-labelledby="tableLabel" *ngIf="forecasts">
-  <thead>
-      <tr>
-          <th>Date</th>
-          <th>Temp. (C)</th>
-          <th>Temp. (F)</th>
-          <th>Summary</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr *ngFor="let forecast of forecasts">
-          <td>{{ forecast.date }}</td>
-          <td>{{ forecast.temperatureC }}</td>
-          <td>{{ forecast.temperatureF }}</td>
-          <td>{{ forecast.summary }}</td>
-      </tr>
-  </tbody>
-</table>
 
 <table class='table table-striped' aria-labelledby="tableLabel" *ngIf="movies">
     <thead>
@@ -36,6 +18,7 @@
             <th>Rating</th>
             <th>WasWatched</th>
             <th>Comments</th>
+            <th>Operations</th>
         </tr>
     </thead>
     <tbody>
@@ -49,9 +32,25 @@
             <td>{{ movie.dateAdded }}</td>
             <td>{{ movie.rating}}</td>
             <td>{{ movie.wasWatched}}</td>
-            <td>{{ movie.comments.length}}</td>
+            <td>{{ movie.numberOfComments}}</td>
+            <td>
+                <a class="btn btn-primary" [routerLink]="['/fetch-data', movie.id]" routerLinkActive="active">Details </a> |
+                <a class="btn btn-info">Edit</a> |
+                <a class="btn btn-danger" (click)="delete(movie.id)">Delete</a>
+            </td>
         </tr>
     </tbody>
 </table>
 
 
+<p>Add a movie</p>
+
+
+<input [(ngModel)]="name" />
+
+<p>{{name}}</p>
+
+<button (click)="submit()">Submit!</button>
+
+
+<input type="date" />

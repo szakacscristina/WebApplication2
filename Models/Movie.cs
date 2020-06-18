@@ -28,8 +28,5 @@ namespace WebApplication2.Models
         public bool WasWatched { get; set; }
 
         public List<Comment> Comments { get; set; }
-
-      
-
     }
 }

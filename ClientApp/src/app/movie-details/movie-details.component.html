@@ -1,0 +1,62 @@
+
+<p *ngIf="!movie"><em>Loading...</em></p>
+
+<a [routerLink]="['/fetch-data']" routerLinkActive="active">Back</a>
+<table class='table table-striped' aria-labelledby="tableLabel" *ngIf="movie">
+    <tbody>
+        <tr>
+            <th>Title</th>
+            <td>{{ movie.title }}</td>
+            </tr>
+        <tr>
+            <th>Description</th>
+            <td>{{ movie.description }}</td>
+            </tr>
+        <tr>
+            <th>MovieUpKeepGenre</th>
+            <td>{{ movie.movieUpKeepGenre }}</td>
+            </tr>
+        <tr>
+            <th>DurationInMin</th>
+            <td>{{ movie.durationInMin }}</td>
+            </tr>
+        <tr>
+            <th>YearofRelease</th>
+            <td>{{ movie.yearOfRelease }}</td>
+            </tr>
+        <tr>
+            <th>Director</th>
+            <td>{{ movie.director }}</td>
+            </tr>
+        <tr>
+            <th>DateAdded</th>
+            <td>{{ movie.dateAdded }}</td>
+            </tr>
+        <tr>
+            <th>Rating</th>
+            <td>{{ movie.rating}}</td>
+            </tr>
+        <tr>
+            <th>WasWatched</th>
+            <td>{{ movie.wasWatched}}</td>
+        </tr>
+    </tbody>
+</table>
+
+<h2>Comments</h2>
+<table *ngIf="movie">
+<thead>
+    <tr>
+    <th>Text</th>
+    <th>Important</th>
+    </tr>
+</thead>
+    <tr *ngFor="let comment of movie.comments">
+        <td> {{ comment.text }}</td>
+        <td>{{ comment.important }}</td>
+        </tr>
+</table>
+<a [routerLink]="['/fetch-data']" routerLinkActive="active">Back</a>
+
+
+

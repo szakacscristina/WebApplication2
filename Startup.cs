@@ -21,6 +21,7 @@ using WebApplication2.ModelValidators;
 using System;
 using System.Reflection;
 using System.IO;
+using Microsoft.AspNetCore.SpaServices.AngularCli;
 
 namespace WebApplication2
 {
@@ -118,9 +119,9 @@ namespace WebApplication2
                 spa.Options.SourcePath = "wwwroot";
 
                 //  if (env.IsDevelopment())
-                //  {
-                //  spa.UseAngularCliServer(npmScript: "start");
-                //  }
+                // {
+                // spa.UseAngularCliServer(npmScript: "start");
+                // }
             });
         }
     }

@@ -20,7 +20,7 @@
     "WebApplication2": {
       "commandName": "Project",
       "launchBrowser": true,
-      "launchUrl": "api/Movies",
+      //"launchUrl": "api/Movies",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       },

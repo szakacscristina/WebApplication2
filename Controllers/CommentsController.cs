@@ -91,11 +91,12 @@ namespace WebApplication2.Controllers
         /// "movieId": 0
         /// }
         /// </remark>
+        /// <param name="id"></param>
         /// <param name="comment">The updated or created Comment</param>
         /// <returns>The updated comment.</returns>
         /// <response code="201">The comment has been updated.</response>
         /// <response code="400">If the comment is null</response>   
-  
+
         [HttpPut("{id}")]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]

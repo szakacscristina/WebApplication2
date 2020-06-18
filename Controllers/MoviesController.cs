@@ -6,6 +6,9 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using WebApplication2.Models;
+using WebApplication2.ViewModels;
+
+
 
 namespace WebApplication2.Controllers
 {
@@ -28,7 +31,7 @@ namespace WebApplication2.Controllers
         /// <param name="to">Filter movies added up to this date time (inclusive). Leave empty for no upper limit. </param>
         /// <returns>A list of flower objects.</returns>
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Movie>>> GetMovies(
+        public async Task<ActionResult<IEnumerable<MovieWithNumberOfComments>>> GetMovies(
             [FromQuery]DateTimeOffset? from = null,
             [FromQuery]DateTimeOffset? to = null)
         {
@@ -44,6 +47,8 @@ namespace WebApplication2.Controllers
 
             var resultList = await result
                 .OrderByDescending(f => f.YearOfRelease)
+                .Include(f => f.Comments)
+                .Select(f => MovieWithNumberOfComments.FromMovie(f))
                 .ToListAsync();
             return resultList;
         }
@@ -56,16 +61,19 @@ namespace WebApplication2.Controllers
         /// <param name="id">Gets a movie depanding on the id. </param>
         /// <returns></returns>
         [HttpGet("{id}")]
-        public async Task<ActionResult<Movie>> GetMovie(long id)
+        public async Task<ActionResult<MovieDetails>> GetMovie(long id)
         {
-            var movie = _context.Movies;
+            var movie = await _context
+                .Movies
+                .Include(f => f.Comments)
+                .FirstOrDefaultAsync(f => f.Id == id);
 
             if (movie == null)
             {
                 return NotFound();
             }
 
-            return await movie.Include(e => e.Comments).SingleOrDefaultAsync(e => e.Id == id); ;
+            return MovieDetails.FromMovie(movie);
         }
 
         // PUT: api/Movies/5

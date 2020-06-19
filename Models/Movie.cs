@@ -26,7 +26,9 @@ namespace WebApplication2.Models
         public DateTimeOffset DateAdded { get; set; }
         public int Rating { get; set; }
         public bool WasWatched { get; set; }
-
+        public User AddedBy { get; set; }
         public List<Comment> Comments { get; set; }
+
+
     }
 }

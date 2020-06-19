@@ -1,27 +1,21 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
 using System.Text.Json.Serialization;
-using System.Threading.Tasks;
-using FluentValidation;
-using FluentValidation.AspNetCore;
+using WebApplication2.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
-using Microsoft.OpenApi.Models;
-using WebApplication2.Models;
-using WebApplication2.ModelValidators;
-using System;
+using FluentValidation.AspNetCore;
 using System.Reflection;
+using Microsoft.OpenApi.Models;
 using System.IO;
-using Microsoft.AspNetCore.SpaServices.AngularCli;
+using WebApplication2.Helpers;
+using System.Text;
+using Microsoft.IdentityModel.Tokens;
+using WebApplication2.Services;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 namespace WebApplication2
 {
@@ -37,18 +31,47 @@ namespace WebApplication2
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<MoviesDbContext>(opt => opt.UseSqlServer(Configuration.GetConnectionString("MoviesDbConnectionString")));
+            // configure strongly typed settings objects
+            var appSettingsSection = Configuration.GetSection("AppSettings");
+            services.Configure<AppSettings>(appSettingsSection);
 
-            services.AddControllers().AddJsonOptions(options =>
+            // JWT Configuration
+            var appSettings = appSettingsSection.Get<AppSettings>();
+            var key = Encoding.ASCII.GetBytes(appSettings.Secret);
+            services.AddAuthentication(x =>
             {
-                options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
-                options.JsonSerializerOptions.IgnoreNullValues = true;
+                x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
             })
-                .AddFluentValidation(fv => fv.RegisterValidatorsFromAssembly(Assembly.GetExecutingAssembly()));
-            services.AddDbContext<MoviesDbContext>(opt => opt.UseSqlServer(Configuration.GetConnectionString("MoviesDbConnectionString")));
-           
-            services.AddTransient<IValidator<Movie>, MovieValidator>();
+            .AddJwtBearer(x =>
+            {
+                x.RequireHttpsMetadata = false;
+                x.SaveToken = true;
+                x.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(key),
+                    ValidateIssuer = false,
+                    ValidateAudience = false
+                };
+            });
 
+            // configure DI (Dependency Injection) for application services
+            services.AddScoped<IUserService, UserService>();
+
+
+            services
+                .AddControllers()
+                .AddJsonOptions(options =>
+                {
+                    options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+                    options.JsonSerializerOptions.IgnoreNullValues = true;
+                })
+                .AddFluentValidation(fv => fv.RegisterValidatorsFromAssembly(Assembly.GetExecutingAssembly()));
+            services.AddDbContext<MoviesDbContext>(opt => opt.UseSqlServer(Configuration.GetConnectionString("MovieDbConnectionString")));
+
+
+            // Register the Swagger generator, defining 1 or more Swagger documents
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo
@@ -60,7 +83,7 @@ namespace WebApplication2
                     Contact = new OpenApiContact
                     {
                         Name = "Cristina - Adelina Szakacs",
-                        Email = "szakacscristina94@yahoo.com",
+                        Email = "szakacscristina94@gmail.com",
                         Url = new Uri("https://twitter.com/spboyer"),
                     },
                     License = new OpenApiLicense
@@ -70,28 +93,36 @@ namespace WebApplication2
                     }
                 });
 
+                // Set the comments path for the Swagger JSON and UI.
                 var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
                 var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
                 c.IncludeXmlComments(xmlPath);
             });
 
+            // In production, the Angular files will be served from this directory
             services.AddSpaStaticFiles(configuration =>
             {
                 configuration.RootPath = "wwwroot/dist";
             });
+
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            //app.UseStaticFiles();
 
+            app.UseAuthentication();
+            // Enable middleware to serve generated Swagger as a JSON endpoint.
             app.UseSwagger();
 
+            // Enable middleware to serve swagger-ui (HTML, JS, CSS, etc.),
+            // specifying the Swagger JSON endpoint.
             app.UseSwaggerUI(c =>
             {
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "My Movies API V1");
             });
+
 
             if (env.IsDevelopment())
             {
@@ -118,11 +149,12 @@ namespace WebApplication2
 
                 spa.Options.SourcePath = "wwwroot";
 
-                //  if (env.IsDevelopment())
-                // {
-                // spa.UseAngularCliServer(npmScript: "start");
-                // }
+                //if (env.IsDevelopment())
+                //{
+                //    spa.UseAngularCliServer(npmScript: "start");
+                //}
             });
+
         }
     }
 }

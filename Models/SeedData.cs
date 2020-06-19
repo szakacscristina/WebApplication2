@@ -1,79 +1,72 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using System;
+using System.Linq;
+using FlowersApp.Helpers;
 
 namespace WebApplication2.Models
 {
-    public static class SeedData
+    public class SeedData
     {
         public static void Initialize(IServiceProvider serviceProvider)
         {
-            using (var context = new MoviesDbContext(serviceProvider.GetRequiredService< DbContextOptions<MoviesDbContext>>()))
+            using (var context = new MoviesDbContext(serviceProvider.GetRequiredService<DbContextOptions<MoviesDbContext>>()))
             {
+
+                if (!context.Users.Any())
+                {
+                    context.Users.Add(new User
+                    {
+                        FirstName = "First",
+                        LastName = "Last",
+                        Username = "FirstUsername",
+                        Password = HashUtils.GetHashString("parolasigura")
+
+                    });
+                    context.SaveChanges();
+                }
+
+
+
                 // Look for any movies.
                 if (context.Movies.Any())
                 {
-                    return;   // DB has been seeded
+                    return;   // DB table has been seeded
                 }
 
                 context.Movies.AddRange(
                     new Movie
                     {
-                       Title = "Titanic",
-                       Description = "hbwdwbbsad",
-                       MovieUpKeepGenre = MovieUpKeepGenre.Horror,
-                       DurationInMin = 40,
-                       YearOfRelease = 2006,
-                       Director = "hefue",
-                       DateAdded = DateTime.Now,
-                       Rating = 10,
-                       WasWatched = true
+                        Title = "When Harry Met Sally",
+                        Description = "sirop",
+                        MovieUpKeepGenre = MovieUpKeepGenre.Comedy,
+                        DurationInMin = 100,
+                        YearOfRelease = 2019 - 10 - 03,
+                        Director = "Ion",
+                        DateAdded = DateTime.Parse("1990-12-5"),
+                        Rating = 2,
+                        WasWatched = true
                     },
 
                     new Movie
                     {
-                        Title = "Genoveva",
-                        Description = "duhfdiu",
+                        Title = "Rio Bravo",
+                        Description = "pistolari",
                         MovieUpKeepGenre = MovieUpKeepGenre.Action,
-                        DurationInMin = 70,
-                        YearOfRelease = 2018,
-                        Director = "GHF",
-                        DateAdded = DateTime.Now,
-                        Rating = 7,
+                        DurationInMin = 150,
+                        YearOfRelease = 2019 - 11 - 03,
+                        Director = "Gheorghe",
+                        DateAdded = DateTime.Parse("2000-10-10"),
+                        Rating = 1,
                         WasWatched = false
-                    },
+                    }
 
-                      new Movie
-                      {
-                          Title = "Povestea mea",
-                          Description = "dwuhwaiufefie",
-                          MovieUpKeepGenre = MovieUpKeepGenre.Comedy,
-                          DurationInMin = 60,
-                          YearOfRelease = 2020,
-                          Director = "hfvf",
-                          DateAdded = DateTime.Now,
-                          Rating = 8,
-                          WasWatched = true
-                      },
-
-                   new Movie
-                   {
-                       Title = "Love Affair",
-                       Description = "uhsaifug",
-                       MovieUpKeepGenre = MovieUpKeepGenre.Thriller,
-                       DurationInMin = 150,
-                       YearOfRelease = 2020,
-                       Director = "HYTF",
-                       DateAdded = DateTime.UtcNow,
-                       Rating = 5,
-                       WasWatched = false
-                   }
-                );
+                    );
                 context.SaveChanges();
             }
+
+
         }
     }
+
 }

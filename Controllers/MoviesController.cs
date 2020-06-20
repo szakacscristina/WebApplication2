@@ -35,6 +35,8 @@ namespace WebApplication2.Controllers
             [FromQuery]DateTimeOffset? from = null,
             [FromQuery]DateTimeOffset? to = null)
         {
+            var identity = User.Identity;
+
             IQueryable<Movie> result = _context.Movies.Include(f => f.Comments);
             if (from != null)
             {

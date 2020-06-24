@@ -25,6 +25,8 @@ const routes: Routes = [
 
     { path: 'movies', loadChildren: './movies/movies.module#MoviesModule' },
 
+    { path: 'comments', loadChildren: './comments/comments.module#CommentsModule' },
+
     { path: '', component: HomeComponent, pathMatch: 'full' },
     { path: 'counter', component: CounterComponent },
     { path: 'fetch-data', component: FetchDataComponent },

@@ -64,7 +64,7 @@
 /******/
 /******/ 	// script path function
 /******/ 	function jsonpScriptSrc(chunkId) {
-/******/ 		return __webpack_require__.p + "" + ({"movies-movies-module-ngfactory":"movies-movies-module-ngfactory"}[chunkId]||chunkId) + ".js"
+/******/ 		return __webpack_require__.p + "" + ({"default~comments-comments-module-ngfactory~movies-movies-module-ngfactory":"default~comments-comments-module-ngfactory~movies-movies-module-ngfactory","comments-comments-module-ngfactory":"comments-comments-module-ngfactory","movies-movies-module-ngfactory":"movies-movies-module-ngfactory"}[chunkId]||chunkId) + ".js"
 /******/ 	}
 /******/
 /******/ 	// The require function

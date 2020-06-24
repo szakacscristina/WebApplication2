@@ -11,7 +11,7 @@ import { MoviesService } from '../movies.service';
 export class MoviesListComponent implements OnInit {
 
 
-    public displayedColumns: string[] = ['title', 'description', 'movieUpKeepGenre', 'durationInMin', 'yearOfRelease', 'director', 'dateAdded', 'rating','wasWatched', 'numberOfComments','action'];
+    public displayedColumns: string[] = ['title', 'description', 'movieUpKeepGenre', 'durationInMin', 'yearOfRelease', 'director', 'dateAdded', 'rating', 'numberOfComments','action'];
     public movies: Movie[];
 
     constructor(private moviesService: MoviesService) {
@@ -27,7 +27,7 @@ export class MoviesListComponent implements OnInit {
         });
     }
     deleteMovie(movie: Movie) {
-        this.moviesService.deleteMovie(movie.Id).subscribe(x => {
+        this.moviesService.deleteMovie(movie.id).subscribe(x => {
             this.loadMovies();
         });
     }

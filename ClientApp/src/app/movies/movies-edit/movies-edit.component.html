@@ -1,5 +1,5 @@
 <p>
-    Add/Edit movie
+    Add/Edit flower
 </p>
 
 <mat-card class="example-card">
@@ -7,7 +7,6 @@
         <div class="example-container">
             <mat-form-field>
                 <input matInput placeholder="Title" formControlName="title" type="text">
-
                 <mat-error *ngIf="formGroup.get('title').touched && formGroup.get('title').errors && formGroup.get('title').errors.required">
                     Title required!
                 </mat-error>
@@ -15,39 +14,34 @@
 
             <mat-form-field>
                 <input matInput placeholder="Description" formControlName="description" type="text">
-
                 <mat-error *ngIf="formGroup.get('description').touched && formGroup.get('description').errors && formGroup.get('description').errors.required">
                     Description required!
                 </mat-error>
             </mat-form-field>
 
             <mat-form-field>
-                <input matInput placeholder="MovieUpKeepGenre" formControlName="movieUpKeepGenre" type="text">
-
+                <input matInput placeholder="Movie Genre" formControlName="movieUpKeepGenre" type="text">
                 <mat-error *ngIf="formGroup.get('movieUpKeepGenre').touched && formGroup.get('movieUpKeepGenre').errors && formGroup.get('movieUpKeepGenre').errors.required">
-                    MovieUpKeepGenre required!
+                    Movie Genre required!
                 </mat-error>
             </mat-form-field>
 
             <mat-form-field>
-                <input matInput placeholder="DurationInMin" formControlName="durationInMin" type="number">
-
+                <input matInput placeholder="Duration" formControlName="durationInMin" type="number">
                 <mat-error *ngIf="formGroup.get('durationInMin').touched && formGroup.get('durationInMin').errors && formGroup.get('durationInMin').errors.required">
-                    DurationInMin required!
+                    Duration required!
                 </mat-error>
             </mat-form-field>
 
             <mat-form-field>
-                <input matInput placeholder="YearOfRelease" formControlName="yearOfRelease" type="number">
-
+                <input matInput placeholder="Year of release" formControlName="yearOfRelease" type="number">
                 <mat-error *ngIf="formGroup.get('yearOfRelease').touched && formGroup.get('yearOfRelease').errors && formGroup.get('yearOfRelease').errors.required">
-                    YearOfRelease required!
+                    Year of Release required!
                 </mat-error>
             </mat-form-field>
 
             <mat-form-field>
                 <input matInput placeholder="Director" formControlName="director" type="text">
-
                 <mat-error *ngIf="formGroup.get('director').touched && formGroup.get('director').errors && formGroup.get('director').errors.required">
                     Director required!
                 </mat-error>
@@ -58,7 +52,6 @@
                 <input matInput [matDatepicker]="dpDateAdded" formControlName="dateAdded">
                 <mat-datepicker-toggle matSuffix [for]="dpDateAdded"></mat-datepicker-toggle>
                 <mat-datepicker #dpDateAdded></mat-datepicker>
-
                 <mat-error *ngIf="formGroup.get('dateAdded').touched && formGroup.get('dateAdded').errors && formGroup.get('dateAdded').errors.required">
                     Date added required!
                 </mat-error>
@@ -66,30 +59,10 @@
 
             <mat-form-field>
                 <input matInput placeholder="Rating" formControlName="rating" type="number">
-
                 <mat-error *ngIf="formGroup.get('rating').touched && formGroup.get('rating').errors && formGroup.get('rating').errors.required">
                     Rating required!
                 </mat-error>
             </mat-form-field>
-
-            <mat-form-field>
-                <input matInput placeholder="WasWatched" formControlName="wasWatched" type="checkbox">
-
-                <mat-error *ngIf="formGroup.get('wasWatched').touched && formGroup.get('wasWatched').errors && formGroup.get('wasWatched').errors.required">
-                    WasWatched required!
-                </mat-error>
-            </mat-form-field>
-
-            <mat-form-field>
-                <input matInput placeholder="Number of comments" formControlName="numberOfComments" type="number">
-
-                <mat-error *ngIf="formGroup.get('numberOfComments').touched && formGroup.get('numberOfComments').errors && formGroup.get('numberOfComments').errors.required">
-                    Number of comments required!
-                </mat-error>
-            </mat-form-field>
-
-
-
         </div>
         <div class="example-button-row">
             <button mat-raised-button color="primary" (click)="save()">Save</button>

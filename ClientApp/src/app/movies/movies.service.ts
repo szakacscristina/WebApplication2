@@ -1,10 +1,8 @@
-import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-
+import { HttpClient } from '@angular/common/http';
 import { Movie } from './movies.models';
 import { ApplicationService } from '../core/services/application.service';
-//import { PaginatedFlowers } from './paginatedFlowers.models';
-import { PageEvent } from '@angular/material/paginator';
+
 
 @Injectable()
 export class MoviesService {
@@ -18,16 +16,16 @@ export class MoviesService {
     }
 
     listMovies() {
-
         return this.http.get<Movie[]>(`${this.applicationService.baseUrl}api/Movies`);
-   }
-
-    saveMovie(movie : Movie) {
-        return this.http.post(`${this.applicationService.baseUrl}api/Movies`, movie);
     }
 
-    modifyMovie(movie : Movie) {
-        return this.http.put(`${this.applicationService.baseUrl}api/Movies/${movie.Id}`, movie);
+    saveMovie(movie: Movie) {
+        return this.http.post(`${this.applicationService.baseUrl}api/Movies`, movie);
+
+    }
+
+    modifyMovie(movie: Movie) {
+        return this.http.put(`${this.applicationService.baseUrl}api/Movies/${movie.id}`, movie);
     }
 
     deleteMovie(id: number) {

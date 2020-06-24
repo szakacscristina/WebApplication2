@@ -52,7 +52,7 @@ export class MoviesEditComponent implements OnInit {
             movie.MovieUpKeepGenre = MovieUpKeepGenre.Comedy;
 
             if (this.isEdit) {
-                movie.Id = this.movieID;
+                movie.id = this.movieID;
 
                 this.moviesService.modifyMovie(movie).subscribe(res => {
                     this.router.navigate(['/movies']);
@@ -72,11 +72,11 @@ export class MoviesEditComponent implements OnInit {
             description: [movie.Description, Validators.required],
             movieUpKeepGenre: [movie.MovieUpKeepGenre, Validators.required],
             durationInMin: [movie.DurationInMin, [Validators.required]],
-            yearOfRealease: [movie.YearOfRelease, [Validators.required]],
+            yearOfRelease: [movie.YearOfRelease, [Validators.required]],
             director: [movie.Director, [Validators.required]],
             dateAdded: [movie.DateAdded, [Validators.required]],
             rating: [movie.Rating, [Validators.required]],
-            wasWatched: [movie.WasWatched, [Validators.required]],
+            //wasWatched: [movie.WasWatched, [Validators.required]],
         });
     }
 

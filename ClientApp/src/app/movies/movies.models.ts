@@ -1,5 +1,5 @@
 export interface Movie {
-    Id: number;
+    id: number;
     Title: string;
     Description: string;
     MovieUpKeepGenre: MovieUpKeepGenre;
@@ -8,7 +8,7 @@ export interface Movie {
     Director: string;
     DateAdded: Date;
     Rating: number;
-    WasWatched: boolean;
+    //WasWatched: boolean;
 }
 export enum MovieUpKeepGenre {
     Action,

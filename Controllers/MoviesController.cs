@@ -2,16 +2,22 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using FlowersApp.ViewModels.Collections;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using WebApplication2.Models;
 using WebApplication2.ViewModels;
-
-
+//using WebApplication2.ViewModels.Collections;
 
 namespace WebApplication2.Controllers
 {
+
+
+    // TODO: make CRUD comments work with URL api/Movies/{id}/Comments
+    // TODO: make CRUD comments with another comments controller: api/comments/{movie id}
+    // TODO: write a validator for comments
+
     [Route("api/[controller]")]
     [ApiController]
     public class MoviesController : ControllerBase
@@ -23,21 +29,25 @@ namespace WebApplication2.Controllers
             _context = context;
         }
 
-        // GET: api/Movies
+        // GET: api/Movies, read more about swagger: https://docs.microsoft.com/en-us/aspnet/core/tutorials/getting-started-with-swashbuckle?view=aspnetcore-3.1&tabs=visual-studio
         /// <summary>
-        /// Gets a list of all the movies
+        /// Gets a list of all the flowers. 
         /// </summary>
-        /// <param name="from">Filter movies added from this date time (inclusive). Leave empty for no lower limit.</param>
-        /// <param name="to">Filter movies added up to this date time (inclusive). Leave empty for no upper limit. </param>
-        /// <returns>A list of flower objects.</returns>
+        /// <param name="from">Filter flowers added from this date time (inclusive). Leave empty for no lower limit.</param>
+        /// <param name="to">Filter flowers add up to this date time (inclusive). Leave empty for no upper limit.</param>
+        /// <param name="page">The page of results, starting from 0.</param>
+        /// <param name="itemsPerPage">The number of flowers to display per page.</param>
+        /// <returns>A list of Flower objects.</returns>       
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<MovieWithNumberOfComments>>> GetMovies(
-            [FromQuery]DateTimeOffset? from = null,
-            [FromQuery]DateTimeOffset? to = null)
+        public async Task<IActionResult> GetMovies(
+            [FromQuery] DateTimeOffset? from = null,
+            [FromQuery] DateTimeOffset? to = null,
+            [FromQuery] int page = 0,
+            [FromQuery] int itemsPerPage = 15)
         {
             var identity = User.Identity;
 
-            IQueryable<Movie> result = _context.Movies.Include(f => f.Comments);
+            IQueryable<Movie> result = _context.Movies;
             if (from != null)
             {
                 result = result.Where(f => from <= f.DateAdded);
@@ -50,18 +60,18 @@ namespace WebApplication2.Controllers
             var resultList = await result
                 .OrderByDescending(f => f.YearOfRelease)
                 .Include(f => f.Comments)
+                .Skip(page * itemsPerPage)
+                .Take(itemsPerPage)
                 .Select(f => MovieWithNumberOfComments.FromMovie(f))
                 .ToListAsync();
-            return resultList;
+
+            var paginatedList = new PaginatedList<MovieWithNumberOfComments>(page, await result.CountAsync(), itemsPerPage);
+            paginatedList.Items.AddRange(resultList);
+
+            return Ok(paginatedList);
         }
 
-
         // GET: api/Movies/5
-        /// <summary>
-        /// Gets a list of all movies
-        /// </summary>
-        /// <param name="id">Gets a movie depanding on the id. </param>
-        /// <returns></returns>
         [HttpGet("{id}")]
         public async Task<ActionResult<MovieDetails>> GetMovie(long id)
         {
@@ -81,12 +91,6 @@ namespace WebApplication2.Controllers
         // PUT: api/Movies/5
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
-        /// <summary>
-        /// Updates a movie.
-        /// </summary>
-        /// <param name="id"> Updates a selected movie depending on the id.</param>
-        /// <param name="movie"> Updates a selected movie depending on the name.</param>
-        /// <returns></returns>
         [HttpPut("{id}")]
         public async Task<IActionResult> PutMovie(long id, Movie movie)
         {
@@ -119,11 +123,6 @@ namespace WebApplication2.Controllers
         // POST: api/Movies
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
-        /// <summary>
-        /// Adds a new movie. 
-        /// </summary>
-        /// <param name="movie"> Adds a new movie.</param>
-        /// <returns></returns>
         [HttpPost]
         public async Task<ActionResult<Movie>> PostMovie(Movie movie)
         {
@@ -134,11 +133,6 @@ namespace WebApplication2.Controllers
         }
 
         // DELETE: api/Movies/5
-        /// <summary>
-        /// Removes a movie.
-        /// </summary>
-        /// <param name="id">Removes a movie depending on the id.</param>
-        /// <returns></returns>
         [HttpDelete("{id}")]
         public async Task<ActionResult<Movie>> DeleteMovie(long id)
         {

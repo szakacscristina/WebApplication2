@@ -5,13 +5,16 @@
 <div class="example-button-row">
     <button mat-raised-button [routerLink]='["../edit"]' color="primary">Add</button>
 </div>
-<br>
 
-<mat-form-field>
-    <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter">
-</mat-form-field>
+<p>Current page: {{movies?.currentPage}}</p>
+<p>Last page: {{movies?.totalPages}}</p>
 
-<table mat-table [dataSource]="movies" class="mat-elevation-z8">
+<mat-paginator [length]="movies?.totalItems"
+               [pageSize]="movies?.itemsPerPage"
+               [pageSizeOptions]="[5, 25, 50, 100]"
+               (page)="pageEvent = loadMovies($event)">
+</mat-paginator>
+<table mat-table [dataSource]="movies?.items" class="mat-elevation-z8" *ngIf="movies">
 
     <!--- Note that these columns can be defined in any order.
           The actual rendered columns are set as a property on the row definition" -->
@@ -88,3 +91,8 @@
 </table>
 <mat-progress-bar mode="indeterminate" *ngIf="!movies"></mat-progress-bar>
 
+<mat-paginator [length]="movies?.totalItems"
+               [pageSize]="movies?.itemsPerPage"
+               [pageSizeOptions]="[5, 25, 50, 100]"
+               (page)="pageEvent = loadMovies($event)">
+</mat-paginator>

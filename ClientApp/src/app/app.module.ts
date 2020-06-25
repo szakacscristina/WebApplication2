@@ -27,6 +27,8 @@ const routes: Routes = [
 
     { path: 'comments', loadChildren: './comments/comments.module#CommentsModule' },
 
+    { path: 'fetch-data/:movieId', loadChildren: './movies/movies.module#MoviesModule' },
+
     { path: '', component: HomeComponent, pathMatch: 'full' },
     { path: 'counter', component: CounterComponent },
     { path: 'fetch-data', component: FetchDataComponent },

@@ -11,7 +11,7 @@
 
 <mat-paginator [length]="movies?.totalItems"
                [pageSize]="movies?.itemsPerPage"
-               [pageSizeOptions]="[5, 25, 50, 100]"
+               [pageSizeOptions]="[5, 15, 50, 100]"
                (page)="pageEvent = loadMovies($event)">
 </mat-paginator>
 <table mat-table [dataSource]="movies?.items" class="mat-elevation-z8" *ngIf="movies">
